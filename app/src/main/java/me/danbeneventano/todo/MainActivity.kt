@@ -8,9 +8,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.logging.Logger
+import android.view.animation.AlphaAnimation
+import android.view.animation.DecelerateInterpolator
+import jp.wasabeef.recyclerview.animators.FadeInAnimator
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +42,17 @@ class MainActivity : AppCompatActivity() {
         val adapter = TodoAdapter(this, list)
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(this)
+        recycler.itemAnimator = FadeInAnimator()
+
+        val fadeIn = AlphaAnimation(0f, 1f)
+        fadeIn.interpolator = DecelerateInterpolator() //add this
+        fadeIn.duration = 1000
+
+        no_items.animation = fadeIn
+
+        if(list.isEmpty()) {
+            no_items.post { no_items.visibility = View.VISIBLE }
+        }
 
         add_layout.submit.setOnClickListener {
             if(input.text.toString().isEmpty()) return@setOnClickListener

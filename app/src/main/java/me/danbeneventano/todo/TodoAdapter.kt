@@ -8,8 +8,13 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_todo.view.*
-import java.util.logging.Logger
 import android.app.Activity
+import android.os.Handler
+import android.view.animation.AlphaAnimation
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
+
+
 
 class TodoAdapter(context: Context, list: MutableList<TodoItem>) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
@@ -49,15 +54,24 @@ class TodoAdapter(context: Context, list: MutableList<TodoItem>) : RecyclerView.
         var checkbox: CheckBox
 
         init {
+            val fadeIn = AlphaAnimation(0f, 1f)
+            fadeIn.interpolator = DecelerateInterpolator() //add this
+            fadeIn.duration = 1000
+
             todoText = itemView.todo_text
             checkbox = itemView.checkbox
             checkbox.setOnCheckedChangeListener { button, checked ->
                 if (checked) {
-                    delete(adapterPosition)
-                    if(list.isEmpty()) {
-                        val noItems = (context as Activity).findViewById(R.id.no_items) as TextView
-                        noItems.visibility = View.VISIBLE
-                    }
+                    val handler = Handler()
+                    handler.postDelayed({
+                        delete(adapterPosition)
+                        if(list.isEmpty()) {
+                            val noItems = (context as Activity).findViewById(R.id.no_items) as TextView
+                            noItems.visibility = View.VISIBLE
+                            noItems.animation = fadeIn
+                            noItems.animate()
+                        }
+                    }, 300)
                 }
             }
         }
