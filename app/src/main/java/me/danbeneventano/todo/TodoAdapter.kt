@@ -12,19 +12,8 @@ import android.app.Activity
 import android.os.Handler
 import android.view.animation.AlphaAnimation
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
 
-
-
-class TodoAdapter(context: Context, list: MutableList<TodoItem>) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
-
-    var context: Context
-    var list: MutableList<TodoItem>
-
-    init {
-        this.context = context
-        this.list = list
-    }
+class TodoAdapter(val context: Context, val list: MutableList<TodoItem>) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return list.size
@@ -50,16 +39,14 @@ class TodoAdapter(context: Context, list: MutableList<TodoItem>) : RecyclerView.
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var todoText: TextView
-        var checkbox: CheckBox
+        var todoText: TextView = itemView.todo_text
+        var checkbox: CheckBox = itemView.checkbox
 
         init {
             val fadeIn = AlphaAnimation(0f, 1f)
             fadeIn.interpolator = DecelerateInterpolator() //add this
             fadeIn.duration = 1000
 
-            todoText = itemView.todo_text
-            checkbox = itemView.checkbox
             checkbox.setOnCheckedChangeListener { button, checked ->
                 if (checked) {
                     val handler = Handler()

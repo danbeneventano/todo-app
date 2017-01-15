@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
             val gson = Gson()
             val json = sharedPrefs.getString("list", "")
             list.addAll(gson.fromJson(json, type))
-            Logger.getGlobal().info("loaded list")
         }
         val input = add_layout.input
         input.maxWidth = input.width
@@ -69,7 +68,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        Logger.getGlobal().info("pause")
         val gson = Gson()
         val jsonString = gson.toJson(list)
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.applicationContext)
